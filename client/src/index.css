@@ -333,3 +333,72 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+/* Upload Panel Styles */
+.upload-panel {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.upload-dropzone {
+  border: 2px dashed rgba(148, 163, 184, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 48px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 160ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+}
+
+.upload-dropzone:hover, .upload-dropzone--active {
+  border-color: var(--accent-2);
+  background: rgba(34, 211, 238, 0.04);
+}
+
+.upload-dropzone__content strong {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--text-strong);
+  margin-bottom: 8px;
+}
+
+.upload-dropzone__content span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.upload-field span {
+  color: var(--text-strong);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.upload-field textarea {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-strong);
+  padding: 16px;
+  outline: none;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.upload-field textarea:focus {
+  border-color: rgba(34, 211, 238, 0.7);
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.14);
+}

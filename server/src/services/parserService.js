@@ -65,9 +65,10 @@ async function extractStructured(text) {
 			return FALLBACK_STRUCTURED_DATA;
 		}
 
-		const response = await client.messages.create({
-			model: 'claude-sonnet-4-20250514',
+		const response = await llm.chat.completions.create({
+			model: 'llama-3.3-70b-versatile',
 			max_tokens: 1000,
+			response_format: { type: 'json_object' },
 			messages: [
 				{
 					role: 'system',
@@ -76,13 +77,16 @@ async function extractStructured(text) {
 				},
 				{
 					role: 'user',
-					content: `Parse the resume text into this JSON schema exactly: { name: string, email: string, skills: string[], experience: string[], education: string[] }. Return only valid JSON. Resume text:\n\n${text.slice(0, 4000)}`,
+					content: `Parse the resume text into this JSON schema exactly: { "name": "string", "email": "string", "skills": ["string"], "experience": ["string"], "education": ["string"] }. Return only valid JSON. Resume text:\n\n${text.slice(0, 4000)}`,
 				},
 			],
 		});
 
-		return JSON.parse(response.content[0].text);
+		let content = response.choices?.[0]?.message?.content || '{}';
+		content = content.replace(/```json/g, '').replace(/```/g, '').trim();
+		return JSON.parse(content);
 	} catch (error) {
+		console.error('[Parser Error]', error.message);
 		return FALLBACK_STRUCTURED_DATA;
 	}
 }

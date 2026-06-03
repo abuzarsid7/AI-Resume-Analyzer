@@ -5,6 +5,6 @@ const resumeController = require('../controllers/resumeController');
 
 const router = express.Router();
 
-router.post('/analyze', authMiddleware, upload.array('resumes', 10), resumeController.analyzeResumes);
+router.post('/analyze', authMiddleware, upload.fields([{ name: 'resumes', maxCount: 10 }, { name: 'jobDescriptionFile', maxCount: 1 }]), resumeController.analyzeResumes);
 
 module.exports = router;

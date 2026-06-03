@@ -34,20 +34,35 @@ export default function Dashboard() {
 
 	return (
 		<main className="dashboard-page">
+			<button
+				style={{
+					position: 'absolute',
+					top: '24px',
+					right: '24px',
+					backgroundColor: 'var(--danger)',
+					color: 'white',
+					padding: '8px 16px',
+					borderRadius: 'var(--radius-sm)',
+					fontWeight: '600',
+					cursor: 'pointer',
+					width: 'auto',
+					boxShadow: '0 4px 12px rgba(251, 113, 133, 0.25)',
+				}}
+				type="button"
+				onClick={logout}
+			>
+				Logout
+			</button>
 			<div className="dashboard-card">
 				<div className="dashboard-topbar">
 					<div>
 						<span className="pill">Dashboard</span>
 						<h1>Resume analysis workspace</h1>
 					</div>
-					<button className="submit-button dashboard-topbar__logout" type="button" onClick={logout}>
-						Logout
-					</button>
 				</div>
 
 				<p>
-					The auth flow is working and your token has been stored locally. Upload resumes, compare
-					candidates, and review feedback below.
+					Upload resumes, compare candidates, and review feedback below.
 				</p>
 
 				<ResumeUploader
@@ -66,6 +81,38 @@ export default function Dashboard() {
 
 				{summary ? <div className="dashboard-summary">{summary}</div> : null}
 
+				{candidates?.length > 0 && (
+					<div style={{ marginBottom: '2rem', padding: '1.5rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+						<h3 style={{ marginBottom: '1rem', color: 'var(--accent-2)' }}>Candidate Rankings Leaderboard</h3>
+						<div style={{ overflowX: 'auto' }}>
+							<table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+								<thead>
+									<tr style={{ borderBottom: '1px solid var(--border)' }}>
+										<th style={{ padding: '0.75rem 0.5rem', fontWeight: 600 }}>Rank</th>
+										<th style={{ padding: '0.75rem 0.5rem', fontWeight: 600 }}>Name</th>
+										<th style={{ padding: '0.75rem 0.5rem', fontWeight: 600 }}>Match Score</th>
+										<th style={{ padding: '0.75rem 0.5rem', fontWeight: 600 }}>Skills</th>
+										<th style={{ padding: '0.75rem 0.5rem', fontWeight: 600 }}>Experience</th>
+									</tr>
+								</thead>
+								<tbody>
+									{candidates.map((c, i) => (
+										<tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+											<td style={{ padding: '0.75rem 0.5rem', color: i === 0 ? '#d4af37' : 'inherit', fontWeight: i === 0 ? 'bold' : 'normal' }}>
+												#{i + 1} {i === 0 && '🏆'}
+											</td>
+											<td style={{ padding: '0.75rem 0.5rem' }}>{c.name || c.filename}</td>
+											<td style={{ padding: '0.75rem 0.5rem' }}><strong>{c.scores.total}%</strong></td>
+											<td style={{ padding: '0.75rem 0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>{c.scores.skills}%</td>
+											<td style={{ padding: '0.75rem 0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>{c.scores.experience}%</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				)}
+
 				{candidates?.length ? (
 					<div className="results-list">
 						{candidates.map((candidate, index) => (
@@ -73,8 +120,6 @@ export default function Dashboard() {
 						))}
 					</div>
 				) : null}
-
-				<code className="token-chip">Token saved: {token ? 'yes' : 'no'}</code>
 			</div>
 		</main>
 	)

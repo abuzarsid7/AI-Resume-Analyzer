@@ -5,11 +5,16 @@ const { getCached, setCached } = require('../utils/cache');
 
 exports.analyzeResumes = async (req, res, next) => {
 	try {
-		const jobDescription = req.body?.jobDescription;
-		const files = req.files || [];
+		let jobDescription = req.body?.jobDescription;
+		const files = req.files?.resumes || [];
+		const jobDescFile = req.files?.jobDescriptionFile?.[0];
+
+		if (jobDescFile) {
+			jobDescription = await extractText(jobDescFile);
+		}
 
 		if (!jobDescription) {
-			return res.status(400).json({ error: 'Job description required' });
+			return res.status(400).json({ error: 'Job description text or file required' });
 		}
 
 		if (!files || files.length === 0) {
@@ -33,6 +38,9 @@ exports.analyzeResumes = async (req, res, next) => {
 				const analyzedResume = {
 					name: structured.name || '',
 					email: structured.email || '',
+					skills: structured.skills || [],
+					experience: structured.experience || [],
+					education: structured.education || [],
 					filename: file.originalname,
 					scores,
 					feedback,

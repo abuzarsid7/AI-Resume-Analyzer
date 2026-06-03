@@ -32,10 +32,28 @@ export default function ResultsCard({ candidate, rank }) {
 				</div>
 
 				<div className="results-card__score">
-					<span>Total Score</span>
-					<strong>{candidate.scores.total}</strong>
+					<span>Total Match Score</span>
+					<strong>{candidate.scores.total}%</strong>
 				</div>
 			</div>
+
+			<div style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+				<div><strong>Skills Score:</strong> {candidate.scores.skills}%</div>
+				<div><strong>Experience Score:</strong> {candidate.scores.experience}%</div>
+				<div><strong>Education Score:</strong> {candidate.scores.education}%</div>
+			</div>
+
+			{candidate.feedback?.comparison && (
+				<div className="results-card__section" style={{ backgroundColor: 'rgba(124, 58, 237, 0.05)', padding: '1.25rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(124, 58, 237, 0.2)' }}>
+					<h4>JD Comparison</h4>
+					<p style={{ marginBottom: '0.75rem', fontSize: '0.9rem', lineHeight: '1.5' }}>
+						<strong>Skills Match:</strong> {candidate.feedback.comparison.skills}
+					</p>
+					<p style={{ fontSize: '0.9rem', lineHeight: '1.5' }}>
+						<strong>Experience Match:</strong> {candidate.feedback.comparison.experience}
+					</p>
+				</div>
+			)}
 
 			<div className="results-card__chart">
 				<ResponsiveContainer width="100%" height={200}>
@@ -62,6 +80,39 @@ export default function ResultsCard({ candidate, rank }) {
 					))}
 				</ul>
 			</div>
+
+			{candidate.skills?.length > 0 && (
+				<div className="results-card__section">
+					<h4>Skills</h4>
+					<ul>
+						{candidate.skills.map((item, i) => (
+							<li key={i}>{item}</li>
+						))}
+					</ul>
+				</div>
+			)}
+
+			{candidate.experience?.length > 0 && (
+				<div className="results-card__section">
+					<h4>Experience</h4>
+					<ul>
+						{candidate.experience.map((item, i) => (
+							<li key={i}>{item}</li>
+						))}
+					</ul>
+				</div>
+			)}
+
+			{candidate.education?.length > 0 && (
+				<div className="results-card__section">
+					<h4>Education</h4>
+					<ul>
+						{candidate.education.map((item, i) => (
+							<li key={i}>{item}</li>
+						))}
+					</ul>
+				</div>
+			)}
 
 			<div className="results-card__section">
 				<h4>Improvements</h4>
