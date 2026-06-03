@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config');
-
-// Hardcode one test user to save time
+//hardcoded test user to save time
 const TEST_USER = { id: '1', email: 'test@test.com', password: 'password123' };
 
 exports.login = (req, res) => {
