@@ -35,7 +35,7 @@ export default function Login() {
 
 			localStorage.setItem('token', data.token)
 			setToken(data.token)
-			navigate('/dashboard')
+			navigate('/')
 		} catch (err) {
 			const message = err.response?.data?.error || 'Unable to sign in. Please try again.'
 			setError(message)
