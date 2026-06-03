@@ -66,7 +66,13 @@ Start the Vite development server:
 npm run dev
 ```
 
-Visit `http://localhost:5173` in your browser. Use the hardcoded test credentials (`test@test.com` / `password123`) to log in.
+Visit `http://localhost:5173` in your browser. 
+
+### 🔐 Test Credentials
+Because this is currently built as a single-user application pending database integration, the system is secured with a hardcoded test user. Use the following credentials to log into the dashboard:
+
+- **Email:** `test@test.com`
+- **Password:** `password123`
 
 ---
 
