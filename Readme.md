@@ -5,7 +5,8 @@ An intelligent, full-stack web application designed to automate and enhance the 
 ## 🚀 Features
 - **Bulk Resume Uploads:** Upload up to 10 resumes simultaneously via drag-and-drop.
 - **Flexible Job Description Input:** Paste a job description directly or upload it as a separate PDF/DOCX file.
-- **Smart Parsing:** Automatically extracts structured data (Name, Email, Skills, Experience, Education) from unstructured document text.
+- **User Authentication:** Secure signup and login flow using JWTs.
+- **Smart Parsing:** Automatically extracts structured data (Name, Email, Skills, Experience, Education) from unstructured document text with optimized, robust LLM prompting.
 - **Semantic Scoring:** Calculates localized similarity scores between resume sections and the job description.
 - **AI Feedback & Comparison:** Generates strengths, areas for improvement, and a direct comparative analysis between the candidate and the JD.
 - **Leaderboard UI:** Renders a clean ranking table and visual radar charts for an at-a-glance evaluation of all candidates.
@@ -69,7 +70,7 @@ npm run dev
 Visit `http://localhost:5173` in your browser. 
 
 ### 🔐 Test Credentials
-Because this is currently built as a single-user application pending database integration, the system is secured with a hardcoded test user. Use the following credentials to log into the dashboard:
+While the app now supports signing up for new accounts (stored in memory during development), you can also use the following hardcoded test credentials to log into the dashboard immediately:
 
 - **Email:** `test@test.com`
 - **Password:** `password123`
@@ -77,6 +78,25 @@ Because this is currently built as a single-user application pending database in
 ---
 
 ## 📚 API Documentation
+
+### `POST /api/auth/signup`
+Registers a new user and returns a JWT.
+- **Body (JSON):**
+  ```json
+  {
+    "name": "John Doe",
+    "email": "newuser@test.com",
+    "password": "password123"
+  }
+  ```
+- **Response:** `201 Created`
+  ```json
+  {
+    "token": "eyJhbG...",
+    "email": "newuser@test.com",
+    "name": "John Doe"
+  }
+  ```
 
 ### `POST /api/auth/login`
 Authenticates a user and returns a JWT.
@@ -145,7 +165,7 @@ AI Resume Analyzer/
 │   │   ├── api/             # Axios client interceptors
 │   │   ├── components/      # Reusable UI (JobDescInput, ResumeUploader, ResultsCard)
 │   │   ├── context/         # React Auth Context Provider
-│   │   ├── pages/           # Route views (Login, Dashboard)
+│   │   ├── pages/           # Route views (Login, Signup, Dashboard)
 │   │   ├── App.jsx          # React Router setup
 │   │   └── index.css        # Global variables and glassmorphism styling
 ├── server/
@@ -168,8 +188,8 @@ AI Resume Analyzer/
 While the core extraction and semantic matching engine is fully functional, there are several exciting architectural and feature upgrades planned for the future:
 
 ### What hasn't been done yet:
-- **Persistent Database:** Currently, analysis results are stored in an ephemeral, memory-based cache (`node-cache`) to prevent redundant LLM calls during hot-reloads. The next step is to wire up the installed Mongoose models to securely store resumes, parsed JSON, and historical scores in a MongoDB cluster.
-- **Robust Authentication:** Replacing the hardcoded test user with full user registration, password hashing (bcrypt), and session management.
+- **Persistent Database:** Currently, analysis results and newly signed-up users are stored in an ephemeral, memory-based cache to prevent redundant LLM calls and allow quick development. The next step is to wire up the installed Mongoose models to securely store users, resumes, parsed JSON, and historical scores in a MongoDB cluster.
+- **Robust Authentication:** Replacing the in-memory user array with full persistent user registration, password hashing (bcrypt), and robust session management.
 - **Webhooks & Async Processing:** For scaling to hundreds of resumes, the API should return an immediate `job_id` and utilize a message queue (like Redis/BullMQ) to process parsing and LLM scoring in the background, updating the frontend via WebSockets.
 
 ### Building the Next-Gen RAG (Retrieval-Augmented Generation) Pipeline:

@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import api from '../api/client'
 
 const initialForm = {
+	name: '',
 	email: '',
 	password: '',
 }
 
-export default function Login() {
+export default function Signup() {
 	const [formData, setFormData] = useState(initialForm)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState('')
@@ -31,13 +31,13 @@ export default function Login() {
 		setError('')
 
 		try {
-			const { data } = await api.post('/auth/login', formData)
+			const { data } = await api.post('/auth/signup', formData)
 
 			localStorage.setItem('token', data.token)
 			setToken(data.token)
 			navigate('/')
 		} catch (err) {
-			const message = err.response?.data?.error || 'Unable to sign in. Please try again.'
+			const message = err.response?.data?.error || 'Unable to sign up. Please try again.'
 			setError(message)
 		} finally {
 			setLoading(false)
@@ -52,7 +52,7 @@ export default function Login() {
 			<div className="auth-shell">
 				<aside className="auth-aside">
 					<span className="eyebrow">AI Resume Analyzer</span>
-					<h1>Sign in and review resumes with a sharper workflow.</h1>
+					<h1>Sign up and review resumes with a sharper workflow.</h1>
 					<p>
 						Compare candidate files, generate scores, and move straight into the dashboard with a
 						clean, focused interface.
@@ -72,12 +72,25 @@ export default function Login() {
 
 				<section className="auth-card">
 					<div className="auth-card__header">
-						<span className="pill">Welcome back</span>
-						<h2>Login</h2>
-						<p>Use your email and password to continue.</p>
+						<span className="pill">Create account</span>
+						<h2>Sign up</h2>
+						<p>Enter your details to create an account.</p>
 					</div>
 
 					<form className="auth-form" onSubmit={handleSubmit}>
+						<label className="field">
+							<span>Name</span>
+							<input
+								type="text"
+								name="name"
+								value={formData.name}
+								onChange={handleChange}
+								placeholder="John Doe"
+								autoComplete="name"
+								required
+							/>
+						</label>
+
 						<label className="field">
 							<span>Email</span>
 							<input
@@ -98,8 +111,8 @@ export default function Login() {
 								name="password"
 								value={formData.password}
 								onChange={handleChange}
-								placeholder="Enter your password"
-								autoComplete="current-password"
+								placeholder="Create a password"
+								autoComplete="new-password"
 								required
 							/>
 						</label>
@@ -107,12 +120,12 @@ export default function Login() {
 						{error ? <p className="error-text">{error}</p> : null}
 
 						<button className="submit-button" type="submit" disabled={loading}>
-							{loading ? 'Signing in...' : 'Sign in'}
+							{loading ? 'Signing up...' : 'Sign up'}
 						</button>
 					</form>
 
 					<p className="auth-footer" style={{ textAlign: 'center', marginTop: '1rem' }}>
-						Don't have an account? <Link to="/signup" style={{ color: '#0070f3', textDecoration: 'none', fontWeight: 'bold' }}>Sign up</Link>
+						Already have an account? <Link to="/login" style={{ color: '#0070f3', textDecoration: 'none', fontWeight: 'bold' }}>Log in</Link>
 					</p>
 				</section>
 			</div>

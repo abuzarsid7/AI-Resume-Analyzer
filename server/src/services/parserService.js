@@ -73,11 +73,23 @@ async function extractStructured(text) {
 				{
 					role: 'system',
 					content:
-						'You are a resume parser. Return ONLY a JSON object and nothing else. Do not use markdown, code fences, or explanations.',
+						'You are an expert resume parser. Return ONLY a valid JSON object and nothing else. Do not use markdown formatting or code blocks. Prioritize accurately extracting the candidate\'s full name and email address.',
 				},
 				{
 					role: 'user',
-					content: `Parse the resume text into this JSON schema exactly: { "name": "string", "email": "string", "skills": ["string"], "experience": ["string"], "education": ["string"] }. Return only valid JSON. Resume text:\n\n${text.slice(0, 4000)}`,
+					content: `Extract the following information from the resume text into a JSON object exactly matching this schema:
+{
+  "name": "Candidate's full name (usually found at the top)",
+  "email": "Candidate's email address",
+  "skills": ["List of skills"],
+  "experience": ["List of work experience"],
+  "education": ["List of education"]
+}
+
+If any field is not found, leave it as an empty string or empty array. Return ONLY valid JSON.
+
+Resume text:
+${text.slice(0, 8000)}`,
 				},
 			],
 		});
